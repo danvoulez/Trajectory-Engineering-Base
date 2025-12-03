@@ -232,7 +232,7 @@ components:
           minimum: 1
         currency:
           type: string
-          description: ISO-4217 (ex.: EUR, USD, BRL)
+          description: "ISO-4217 (ex.: EUR, USD, BRL)"
         counterparty:
           type: string
       required: [scope, items, sla_hours, currency, counterparty]

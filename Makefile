@@ -9,21 +9,16 @@ check: schemas openapi examples
 schemas:
 	@echo "→ validate schemas (jsonlint only)"; \
 	for f in $(SCHEMAS_DIR)/*.json; do \
-		python -m json.tool $$f > /dev/null || exit 1; \
+		python3 -m json.tool $$f > /dev/null || exit 1; \
 	done
 
 openapi:
 	@echo "→ lint OpenAPI (syntax only)"; \
-	python - <<'PY' || exit 1; \
-	import sys, yaml; \
-	with open('openapi/diamond.yaml','r',encoding='utf-8') as f: \
-		yaml.safe_load(f); \
-	print('openapi ok'); \
-	PY
+	python3 scripts/validate_openapi.py
 
 examples:
 	@echo "→ validate example JSON syntax"; \
 	for f in $(EXAMPLES_DIR)/*.json; do \
-		python -m json.tool $$f > /dev/null || exit 1; \
+		python3 -m json.tool $$f > /dev/null || exit 1; \
 	done
 

@@ -6,7 +6,7 @@ Este documento cobre schemas, OpenAPI, CLIs e exemplos do repositório "Diamond 
 
 ## 📬 Como reportar
 
-Envie um e-mail para security@logline.world (ajuste para o seu domínio).
+Envie um e-mail para dan@danvoulez.com
 
 **Assunto:** `[SECURITY] <título curto>`
 
@@ -69,4 +69,3 @@ Reportes devem referenciar tag/commit e schema_version/pipeline_version quando a
 ## 📄 Contato alternativo
 
 Se o e-mail principal falhar, crie um issue com o título "SECURITY: please provide contact" (sem detalhes sensíveis). Entraremos em contato por canal reservado.
-

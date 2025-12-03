@@ -11,4 +11,3 @@
 * **Zip do repo:** `git archive -o diamond-v1.0.0.zip HEAD`
 * **BLAKE3:** `b3sum diamond-v1.0.0.zip > diamond-v1.0.0.zip.b3`
 * **Release notes:** colar itens do CHANGELOG (resumo objetivo).
-

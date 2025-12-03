@@ -25,4 +25,3 @@ for label in "${labels[@]}"; do
 done
 
 echo "✓ Labels criados"
-

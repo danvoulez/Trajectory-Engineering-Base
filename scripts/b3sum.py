@@ -16,4 +16,3 @@ with open(file_path, 'rb') as f:
         hasher.update(chunk)
 
 print(hasher.hexdigest())
-

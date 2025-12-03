@@ -21,4 +21,3 @@ examples:
 	for f in $(EXAMPLES_DIR)/*.json; do \
 		python3 -m json.tool $$f > /dev/null || exit 1; \
 	done
-

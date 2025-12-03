@@ -81,4 +81,3 @@ gh issue create \
   --repo "$REPO" 2>/dev/null || echo "  ⚠ Issue já existe"
 
 echo "✓ Issues do roadmap criadas"
-

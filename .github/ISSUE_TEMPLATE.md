@@ -40,4 +40,3 @@ O que está acontecendo.
 - [ ] Verifiquei que não é duplicata
 - [ ] Li a documentação relevante
 - [ ] Testei localmente (se aplicável)
-

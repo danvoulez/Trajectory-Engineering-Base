@@ -42,4 +42,3 @@ Se sim, descreva as mudanças breaking:
 
 ## Referências
 Closes #(issue)
-

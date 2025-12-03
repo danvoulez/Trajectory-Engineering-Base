@@ -22,18 +22,18 @@ def verify_signature(proof_path: Path):
     if not proof_path.exists():
         print(f"✗ Arquivo não encontrado: {proof_path}")
         return False
-    
+
     proof = json.loads(proof_path.read_text())
-    
+
     # Carrega chave pública
     verify_key = nacl.signing.VerifyKey(
         proof["pubkey_ed25519"],
         encoder=nacl.encoding.HexEncoder
     )
-    
+
     # Reconstrói mensagem (sig_context || bytes_canon_hash_b3)
     message = (proof["sig_context"] + "||" + proof["bytes_canon_hash_b3"]).encode()
-    
+
     # Verifica assinatura
     try:
         verify_key.verify(message, bytes.fromhex(proof["signature_ed25519"]))
@@ -48,10 +48,9 @@ def verify_signature(proof_path: Path):
 if __name__ == "__main__":
     repo_root = Path(__file__).parent.parent
     proof_path = repo_root / "CHANGELOG.md.proof.json"
-    
+
     if len(sys.argv) > 1:
         proof_path = Path(sys.argv[1])
-    
+
     success = verify_signature(proof_path)
     sys.exit(0 if success else 1)
-

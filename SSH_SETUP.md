@@ -80,4 +80,3 @@ Configure em: https://github.com/danvoulez/Trajectory-Engineering-Base/settings/
 - ✅ Remote configurado (HTTPS temporário)
 - ⏳ Aguardando adição da chave SSH no GitHub
 - ⏳ Branch protection a configurar
-

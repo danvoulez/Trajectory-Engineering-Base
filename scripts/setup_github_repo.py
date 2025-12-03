@@ -58,7 +58,7 @@ def api_request(method, endpoint, token, data=None):
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
     }
-    
+
     if method == "GET":
         resp = requests.get(url, headers=headers)
     elif method == "PATCH":
@@ -67,7 +67,7 @@ def api_request(method, endpoint, token, data=None):
         resp = requests.post(url, headers=headers, json=data)
     elif method == "PUT":
         resp = requests.put(url, headers=headers, json=data)
-    
+
     resp.raise_for_status()
     return resp.json() if resp.content else {}
 
@@ -80,9 +80,9 @@ def main():
         print("   gh auth login")
         print("   gh release create v1.0.0 --notes-file CHANGELOG.md")
         return
-    
+
     print("Configurando repositório GitHub...\n")
-    
+
     # 1. Atualizar descrição e topics
     print("1. Configurando descrição e topics...")
     repo_data = {
@@ -94,12 +94,12 @@ def main():
         print("   ✓ Descrição e topics atualizados")
     except Exception as e:
         print(f"   ⚠ Erro: {e}")
-    
+
     # 2. Criar release v1.0.0
     print("\n2. Criando release v1.0.0...")
     changelog = Path("CHANGELOG.md").read_text()
     release_notes = changelog.split("## [1.0.0]")[1].split("##")[0].strip() if "## [1.0.0]" in changelog else changelog
-    
+
     release_data = {
         "tag_name": "v1.0.0",
         "name": "Diamond Baseline v1.0.0",
@@ -107,13 +107,13 @@ def main():
         "draft": False,
         "prerelease": False
     }
-    
+
     try:
         api_request("POST", f"/repos/{REPO}/releases", token, release_data)
         print("   ✓ Release v1.0.0 criada")
     except Exception as e:
         print(f"   ⚠ Erro: {e}")
-    
+
     # 3. Criar issues iniciais
     print("\n3. Criando issues iniciais...")
     issues = [
@@ -130,16 +130,15 @@ def main():
             "body": "Implementar CLIs prototipais para tcap, unote, spent e diamante (modo dry-run)."
         }
     ]
-    
+
     for issue in issues:
         try:
             api_request("POST", f"/repos/{REPO}/issues", token, issue)
             print(f"   ✓ Issue criada: {issue['title']}")
         except Exception as e:
             print(f"   ⚠ Erro ao criar issue '{issue['title']}': {e}")
-    
+
     print("\n✓ Configuração concluída!")
 
 if __name__ == "__main__":
     main()
-

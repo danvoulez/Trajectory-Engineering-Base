@@ -6,6 +6,7 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
+        args: ['--markdown-linebreak-ext=md']
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-json
@@ -17,14 +18,14 @@ repos:
     hooks:
       - id: validate-schemas
         name: Validate JSON Schemas
-        entry: python3 -m json.tool
+        entry: bash -c 'for f; do python3 -m json.tool "$f" > /dev/null || exit 1; done' --
         language: system
         files: ^schemas/.*\.json$
         pass_filenames: true
 
       - id: validate-examples
         name: Validate Example JSON
-        entry: python3 -m json.tool
+        entry: bash -c 'for f; do python3 -m json.tool "$f" > /dev/null || exit 1; done' --
         language: system
         files: ^examples/.*\.json$
         pass_filenames: true
@@ -41,4 +42,3 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-

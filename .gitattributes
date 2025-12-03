@@ -1,0 +1,12 @@
+# Normalize line endings
+*.json text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.md   text eol=lf
+*.sh   text eol=lf
+*.py   text eol=lf
+
+# Binary files
+*.zip binary
+*.pem binary
+*.asc text

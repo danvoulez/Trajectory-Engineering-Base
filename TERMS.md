@@ -77,4 +77,3 @@ Na ausência de contrato comercial específico, aplica-se a lei do domicílio do
 ## 13) Contato de Segurança
 
 Relate vulnerabilidades em SECURITY.md (responsible disclosure).
-

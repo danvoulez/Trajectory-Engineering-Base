@@ -43,4 +43,3 @@ ssh -T git@github.com
 - **Nunca compartilhe a chave privada** (`~/.ssh/id_ed25519_github`)
 - A chave privada está no `.gitignore` e não será commitada
 - Use senha forte se adicionar passphrase: `ssh-keygen -p -f ~/.ssh/id_ed25519_github`
-

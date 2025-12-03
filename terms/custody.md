@@ -77,4 +77,3 @@
 * Auditoria técnica por terceiro independente (com NDA) **MAY** ocorrer 1x/ano.
 
 * Disputas técnicas priorizam **provas criptográficas** e registros UBL.
-

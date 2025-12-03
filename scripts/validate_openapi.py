@@ -12,4 +12,3 @@ try:
 except Exception as e:
     print(f'openapi error: {e}')
     sys.exit(1)
-

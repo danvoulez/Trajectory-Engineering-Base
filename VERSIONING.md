@@ -15,4 +15,3 @@
 ## Suites
 
 `auditset@x.y.z`, `evalsuite@x.y.z` — mudar seed/prompt ⇒ bump MINOR; mudar métrica ⇒ MAJOR.
-

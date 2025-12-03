@@ -59,4 +59,3 @@
 * Export de métricas (Prometheus/OpenMetrics) **SHOULD** estar disponível.
 
 * Relatórios mensais de disponibilidade **MUST** incluir p95/p99 e incidentes.
-

@@ -11,4 +11,3 @@
 * **MUST** usar sig_context correto por tipo de span.
 * **MUST** incluir owner_id/tenant_id quando aplicável.
 * **Chaves:** Ed25519; armazenamento seguro; rotação conforme KEY-ROTATION.md.
-

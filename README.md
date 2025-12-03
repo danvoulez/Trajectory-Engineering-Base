@@ -1,5 +1,10 @@
 # Diamond Baseline v1 — JSON✯Atomic, CLIs & OpenAPI
 
+[![check](https://github.com/danvoulez/Trajectory-Engineering-Base/actions/workflows/check.yml/badge.svg)](../../actions)
+![license-code](https://img.shields.io/badge/code-MIT-blue)
+![license-spec](https://img.shields.io/badge/spec-CC--BY--4.0-green)
+![semver](https://img.shields.io/badge/semver-1.0.0-black)
+
 "Chat & diamonds are forever." Este repositório fixa o baseline v1 do padrão Diamante:
 
 * Schemas JSON✯Atomic (provas, proveniência e execução),

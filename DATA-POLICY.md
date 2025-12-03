@@ -23,4 +23,3 @@ Todo endpoint requer Authorization + assinatura (X-Signature, X-Timestamp, X-Sig
 ## Logs
 
 Manter `attestation_id`, `manifest_id`, `epoch_root`, `unote_txid` (sem conteúdo sensível).
-

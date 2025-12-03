@@ -64,4 +64,3 @@ echo "   1. Adicione a chave SSH como Deploy Key no GitHub"
 echo "   2. Configure 2FA na sua conta GitHub"
 echo "   3. Revise as branch protection rules em:"
 echo "      https://github.com/$REPO/settings/branches"
-

@@ -14,4 +14,3 @@
 | payment_ref | attestation.issue | economics.payment_ref | Atrela receita/royalty |
 
 **Regra:** todo lançamento UBL que derive de /redeem **MUST** carregar `attestation_id`, `manifest_id`, `epoch_root`, `unote_txid`, `capsule_b3` no memo/refs.
-

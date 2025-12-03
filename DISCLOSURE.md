@@ -44,4 +44,3 @@ Com consentimento, listamos o(s) pesquisador(es) em "Acknowledgments" do advisor
 ## Atualizações
 
 Mudanças nesta política serão versionadas e datadas neste arquivo.
-

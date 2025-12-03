@@ -36,4 +36,3 @@ echo "  \"allow_deletions\": false,"
 echo "  \"required_conversation_resolution\": true"
 echo "}"
 echo "EOF"
-

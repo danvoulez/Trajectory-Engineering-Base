@@ -10,4 +10,3 @@ Primeira release pública do baseline:
 * Exemplos canônicos.
 * TERMS, LICENSES, SECURITY, DISCLOSURE.
 * Regras de canonicidade, assinatura e versionamento definidas.
-

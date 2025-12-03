@@ -10,20 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      
+
       - name: Install deps (pre-commit)
         run: |
           python -m pip install --upgrade pip pre-commit pyyaml
-      
+
       - name: Pre-commit
         run: |
           pre-commit install
+          pre-commit run --all-files || true
+          # Se arquivos foram modificados, commit e push
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Auto-fix: trailing whitespace and end-of-file" || true
+            git push || true
+          fi
+          # Re-run para verificar se tudo passou
           pre-commit run --all-files
-      
+
       - name: Make check
         run: make check
-

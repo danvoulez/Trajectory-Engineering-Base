@@ -1,7 +1,6 @@
-Contact: mailto:security@logline.world
+Contact: mailto:dan@danvoulez.com
 Policy: https://github.com/danvoulez/Trajectory-Engineering-Base/blob/main/SECURITY.md
 Encryption: https://github.com/danvoulez/Trajectory-Engineering-Base/blob/main/pubkey.asc
 Preferred-Languages: en,pt-BR
 Canonical: https://github.com/danvoulez/Trajectory-Engineering-Base/blob/main/.well-known/security.txt
 Expires: 2026-12-31T00:00:00Z
-

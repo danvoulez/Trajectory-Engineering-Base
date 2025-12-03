@@ -1,0 +1,65 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/unote.tx.json",
+  "title": "unote.tx",
+  "type": "object",
+  "properties": {
+    "span_type": { "const": "unote.tx" },
+    "schema_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "pipeline_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "tid": { "$ref": "common.defs.json#/$defs/tid" },
+    "tx_nonce": { "$ref": "common.defs.json#/$defs/hex64" },
+    "spent_chain_id": { "type": "string", "default": "default" },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "unote_id": { "$ref": "common.defs.json#/$defs/hex" },
+          "amount": { "type": "integer", "minimum": 0 },
+          "sig_owner": { "$ref": "common.defs.json#/$defs/hex" }
+        },
+        "required": ["unote_id","amount","sig_owner"],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "unote_id": { "$ref": "common.defs.json#/$defs/hex" },
+          "amount": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["unote_id","amount"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "unit": { "enum": ["audit_exec","verify_only","train_pack"] },
+        "pack_size": { "type": "integer", "minimum": 1 },
+        "split_min_unit": { "type": "integer", "minimum": 1 },
+        "expiry": { "anyOf": [ { "$ref": "common.defs.json#/$defs/iso8601" }, { "type": "null" } ] },
+        "expiry_behavior": { "enum": ["auto_invalidate","allow_grace"] }
+      },
+      "required": ["unit","pack_size","split_min_unit"],
+      "additionalProperties": false
+    },
+    "fee": { "type": "integer", "minimum": 0 },
+    "timestamp": { "$ref": "common.defs.json#/$defs/iso8601" },
+    "sig_issuer": { "$ref": "common.defs.json#/$defs/hex" },
+    "bytes_canon_hash_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "sig_context": { "const": "diamond:unote.tx:v1" },
+    "signature_ed25519": { "$ref": "common.defs.json#/$defs/hex" },
+    "owner_id": { "$ref": "common.defs.json#/$defs/owner" },
+    "tenant_id": { "$ref": "common.defs.json#/$defs/tenant" },
+    "visibility": { "enum": ["private","public"] }
+  },
+  "required": ["span_type","schema_version","pipeline_version","tid","tx_nonce","inputs","outputs","policy","timestamp","bytes_canon_hash_b3","sig_context","signature_ed25519","owner_id","tenant_id","visibility"],
+  "additionalProperties": false
+}

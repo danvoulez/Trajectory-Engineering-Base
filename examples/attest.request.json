@@ -1,0 +1,14 @@
+{
+  "gpu": false,
+  "metrics": [
+    "A",
+    "R",
+    "C",
+    "P"
+  ],
+  "sample": 512,
+  "targets": [
+    "capsule_b3:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ]
+}
+

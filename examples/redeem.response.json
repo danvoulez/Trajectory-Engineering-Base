@@ -1,0 +1,32 @@
+{
+  "attestation": {
+    "bytes_canon_hash_b3": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "contract": {
+      "price_eur": 55,
+      "royalty_split": "80/20",
+      "sla": "24h"
+    },
+    "lot": "lot-2025-12-03",
+    "metrics": {
+      "A": 0.81,
+      "C": 0.73,
+      "P": 1,
+      "R": 1.58,
+      "V": null,
+      "V_LB95": null
+    },
+    "schema_version": "1.0.0",
+    "sig_context": "diamond:v1",
+    "signature_ed25519": "ed25519:...",
+    "span_type": "attestation.issue",
+    "visibility": "public"
+  },
+  "epoch_root": "er_999",
+  "ok": true,
+  "ubl_entries": [
+    "invoice:INV-q_123",
+    "journal:JB-457"
+  ],
+  "unote_txid": "utx_abc"
+}
+

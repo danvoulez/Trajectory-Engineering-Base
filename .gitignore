@@ -1,0 +1,27 @@
+# generic
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+
+# node/tools
+node_modules/
+dist/
+coverage/
+
+# python/tools
+__pycache__/
+.venv/
+
+# artifacts
+*.zip
+*.tar.gz
+*.tgz
+*.tar
+
+# keys (private)
+.diamond_signing_key
+*.sig
+*.proof.json
+

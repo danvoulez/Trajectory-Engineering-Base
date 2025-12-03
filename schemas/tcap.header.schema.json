@@ -1,0 +1,37 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/tcap.header.schema.json",
+  "title": "tcap.header (logical JSON view)",
+  "type": "object",
+  "properties": {
+    "magic": { "const": "TCAPv1\\u0000" },
+    "version": { "const": 1 },
+    "endianness": { "const": "LE" },
+    "offsets": {
+      "type": "object",
+      "properties": {
+        "manifest_off": { "type": "integer", "minimum": 0 },
+        "index_off": { "type": "integer", "minimum": 0 },
+        "first_block_off": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["manifest_off","index_off","first_block_off"],
+      "additionalProperties": false
+    },
+    "caps": {
+      "type": "object",
+      "properties": {
+        "compression": { "enum": ["none","zstd"] },
+        "encryption": { "type": "boolean" }
+      },
+      "required": ["compression","encryption"],
+      "additionalProperties": false
+    },
+    "capsule_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "header_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "sig_context": { "const": "diamond:tcap:v1" },
+    "signature_ed25519": { "$ref": "common.defs.json#/$defs/hex" }
+  },
+  "required": ["magic","version","endianness","offsets","caps","capsule_b3","header_b3","sig_context","signature_ed25519"],
+  "additionalProperties": false
+}

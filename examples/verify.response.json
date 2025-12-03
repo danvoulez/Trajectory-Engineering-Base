@@ -1,0 +1,14 @@
+{
+  "P": 1,
+  "coverage": 0.92,
+  "ok": true,
+  "spent": {
+    "proof": "merkle:...",
+    "status": "not_spent"
+  },
+  "ubl_match": {
+    "invoice": "INV-q_123",
+    "status": "matched"
+  }
+}
+

@@ -1,0 +1,39 @@
+{
+  "span_type": "unote.tx",
+  "schema_version": "1.0.0",
+  "tid": "did:diamond:abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890.1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890:v1",
+  "spent_chain_id": "default",
+  "tx_nonce": "0123456789abcdef0123456789abcdef",
+  "inputs": [
+    {
+      "unote_id": "u_A",
+      "amount": 100,
+      "sig_owner": "ed25519:..."
+    }
+  ],
+  "outputs": [
+    {
+      "unote_id": "u_B",
+      "amount": 33
+    },
+    {
+      "unote_id": "u_C",
+      "amount": 33
+    },
+    {
+      "unote_id": "u_D",
+      "amount": 34
+    }
+  ],
+  "policy": {
+    "unit": "audit_exec",
+    "pack_size": 512
+  },
+  "fee": 0,
+  "timestamp": "2025-12-03T10:00:00Z",
+  "sig_issuer": "ed25519:...",
+  "sig_context": "diamond:unote.tx:v1",
+  "bytes_canon_hash_b3": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "signature_ed25519": "ed25519:..."
+}
+

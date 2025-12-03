@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "signature",
+    "merkle",
+    "coverage",
+    "ubl_match",
+    "spent"
+  ],
+  "manifest_path": "s3://bucket/lot1/manifest.lot.json"
+}
+

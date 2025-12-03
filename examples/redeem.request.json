@@ -1,0 +1,9 @@
+{
+  "gpu": false,
+  "manifest": "s3://bucket/lot1/manifest.lot.json",
+  "payment_ref": "tx_789",
+  "quote_id": "q_123",
+  "sample": 512,
+  "unotes": ["uB", "uC"]
+}
+

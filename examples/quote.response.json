@@ -1,0 +1,15 @@
+{
+  "expires_at": "2025-12-05T23:59:59Z",
+  "formula": {
+    "alpha": 0.05,
+    "base": 15,
+    "beta": 10
+  },
+  "price": {
+    "amount": 55,
+    "currency": "EUR"
+  },
+  "quote_id": "q_123",
+  "signature": "ed25519:..."
+}
+

@@ -1,0 +1,36 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/audit.run.json",
+  "title": "audit.run",
+  "type": "object",
+  "properties": {
+    "span_type": { "const": "audit.run" },
+    "schema_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "pipeline_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "targets": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "checks": {
+      "type": "array",
+      "items": { "enum": ["nli","temporal","causal","provenance","warp"] },
+      "minItems": 1
+    },
+    "results": {
+      "type": "object",
+      "properties": {
+        "C_macroF1": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confusion": { "type": "object", "additionalProperties": true },
+        "R_curve": { "type": "object", "additionalProperties": true },
+        "P": { "type": "object", "additionalProperties": true }
+      },
+      "additionalProperties": true
+    },
+    "bytes_canon_hash_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "signature_ed25519": { "$ref": "common.defs.json#/$defs/hex" },
+    "sig_context": { "type": "string", "enum": ["diamond:v1"] },
+    "owner_id": { "$ref": "common.defs.json#/$defs/owner" },
+    "tenant_id": { "$ref": "common.defs.json#/$defs/tenant" },
+    "visibility": { "enum": ["private","public"] }
+  },
+  "required": ["span_type","schema_version","pipeline_version","targets","checks","bytes_canon_hash_b3","signature_ed25519","sig_context","owner_id","tenant_id","visibility"],
+  "additionalProperties": false
+}

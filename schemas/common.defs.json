@@ -1,0 +1,19 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/common.defs.json",
+  "title": "Common Definitions",
+  "type": "object",
+  "$defs": {
+    "semver": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "hex": { "type": "string", "pattern": "^[a-f0-9]+$" },
+    "hex64": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "did": { "type": "string", "maxLength": 128, "pattern": "^did:(key|web):.+$" },
+    "tid": { "type": "string", "pattern": "^did:diamond:[a-f0-9]{64}\\.[a-f0-9]{64}(:v[0-9]+)?$" },
+    "iso8601": { "type": "string", "format": "date-time" },
+    "sig_context": { "type": "string", "enum": ["diamond:v1","diamond:genesis:v1","diamond:tcap:v1","diamond:unote.tx:v1"] },
+    "owner": { "type": "string", "allOf": [ { "$ref": "#/$defs/did" } ] },
+    "tenant": { "type": "string", "allOf": [ { "$ref": "#/$defs/did" } ] },
+    "b3": { "type": "string", "allOf": [ { "$ref": "#/$defs/hex64" } ] }
+  }
+}

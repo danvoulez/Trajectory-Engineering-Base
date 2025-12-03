@@ -1,0 +1,8 @@
+{
+  "counterparty": "buyer_123",
+  "currency": "EUR",
+  "items": 800,
+  "scope": "audit",
+  "sla_hours": 24
+}
+

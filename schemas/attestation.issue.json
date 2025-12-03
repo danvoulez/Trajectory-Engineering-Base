@@ -1,0 +1,63 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/attestation.issue.json",
+  "title": "attestation.issue",
+  "type": "object",
+  "properties": {
+    "span_type": { "const": "attestation.issue" },
+    "schema_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "pipeline_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "lot": { "type": "string" },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "type": { "enum": ["verification","audit","score"] },
+        "detail": { "type": "string" }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "A": { "type": "number", "minimum": 0, "maximum": 1 },
+        "R": { "type": "number", "minimum": 1 },
+        "C": { "type": "number", "minimum": 0, "maximum": 1 },
+        "P": { "type": "number", "enum": [0,0.5,1] },
+        "V": { "anyOf": [ { "type": "number", "minimum": 0 }, { "type": "null" } ] },
+        "V_LB95": { "anyOf": [ { "type": "number", "minimum": 0 }, { "type": "null" } ] }
+      },
+      "required": ["A","R","C","P"],
+      "additionalProperties": false
+    },
+    "ic": { "type": "object", "additionalProperties": true },
+    "contract": {
+      "type": "object",
+      "properties": {
+        "sla": { "type": "string" },
+        "price_eur": { "type": "number", "minimum": 0 },
+        "royalty_split": { "type": "string", "pattern": "^[0-9]{1,3}/[0-9]{1,3}$" }
+      },
+      "required": ["sla","price_eur","royalty_split"],
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "properties": {
+        "hash": { "$ref": "common.defs.json#/$defs/b3" },
+        "signature": { "$ref": "common.defs.json#/$defs/hex" }
+      },
+      "required": ["hash","signature"],
+      "additionalProperties": false
+    },
+    "bytes_canon_hash_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "signature_ed25519": { "$ref": "common.defs.json#/$defs/hex" },
+    "sig_context": { "type": "string", "enum": ["diamond:v1"] },
+    "owner_id": { "$ref": "common.defs.json#/$defs/owner" },
+    "tenant_id": { "$ref": "common.defs.json#/$defs/tenant" },
+    "visibility": { "enum": ["private","public"] }
+  },
+  "required": ["span_type","schema_version","pipeline_version","lot","scope","metrics","contract","receipt","bytes_canon_hash_b3","signature_ed25519","sig_context","owner_id","tenant_id","visibility"],
+  "additionalProperties": false
+}

@@ -1,0 +1,91 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/manifest.lot.json",
+  "title": "manifest.lot",
+  "type": "object",
+  "properties": {
+    "span_type": { "const": "manifest.lot" },
+    "schema_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "pipeline_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "lot": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "domains": { "type": "array", "items": { "type": "string" } },
+        "partitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "bytes": { "type": "integer", "minimum": 0 },
+              "files": { "type": "integer", "minimum": 1 },
+              "blake3": { "$ref": "common.defs.json#/$defs/b3" },
+              "dv25_seal": { "type": "boolean" }
+            },
+            "required": ["path","bytes","files","blake3"],
+            "additionalProperties": false
+          }
+        },
+        "materializations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": { "enum": ["parquet","arrow","other"] },
+              "path": { "type": "string" },
+              "schema_hash": { "$ref": "common.defs.json#/$defs/b3" },
+              "blake3": { "$ref": "common.defs.json#/$defs/b3" }
+            },
+            "required": ["kind","path"],
+            "additionalProperties": false
+          }
+        },
+        "sidecars": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": { "enum": ["kv_index","bloom","gcs","other"] },
+              "path": { "type": "string" },
+              "blake3": { "$ref": "common.defs.json#/$defs/b3" }
+            },
+            "required": ["kind","path"],
+            "additionalProperties": false
+          }
+        },
+        "versions": {
+          "type": "object",
+          "properties": {
+            "atomic_schema": { "$ref": "common.defs.json#/$defs/semver" },
+            "enzymes": { "type": "string" },
+            "gen_ops": { "type": "string" },
+            "auditset": { "type": "string" },
+            "evalsuite": { "type": "string" }
+          },
+          "required": ["atomic_schema"],
+          "additionalProperties": true
+        },
+        "merkle": {
+          "type": "object",
+          "properties": {
+            "root": { "$ref": "common.defs.json#/$defs/b3" }
+          },
+          "required": ["root"],
+          "additionalProperties": true
+        }
+      },
+      "required": ["name","domains","partitions","versions","merkle"],
+      "additionalProperties": false
+    },
+    "bytes_canon_hash_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "signature_ed25519": { "$ref": "common.defs.json#/$defs/hex" },
+    "sig_context": { "type": "string", "enum": ["diamond:v1"] },
+    "owner_id": { "$ref": "common.defs.json#/$defs/owner" },
+    "tenant_id": { "$ref": "common.defs.json#/$defs/tenant" },
+    "visibility": { "enum": ["private","public"] }
+  },
+  "required": ["span_type","schema_version","pipeline_version","lot","bytes_canon_hash_b3","signature_ed25519","sig_context","owner_id","tenant_id","visibility"],
+  "additionalProperties": false
+}

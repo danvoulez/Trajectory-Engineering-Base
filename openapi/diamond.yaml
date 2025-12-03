@@ -1,0 +1,446 @@
+openapi: 3.1.0
+info:
+  title: Diamond Market API
+  version: "1.0.0"
+  summary: Endpoints para /quote, /redeem, /verify e /attest (baseline v1)
+  description: |
+    Contratos estáveis, determinísticos e auditáveis. Todas as respostas seguem ordenação lexicográfica de chaves.
+
+servers:
+  - url: https://api.example.com
+    description: Servidor padrão (substituir)
+
+security:
+  - ApiKeyAuth: []
+  - Ed25519Sig: []
+
+paths:
+  /quote:
+    post:
+      operationId: createQuote
+      summary: Gera cotação para execução (verify/attest/redeem downstream)
+      security:
+        - ApiKeyAuth: []
+        - Ed25519Sig: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuoteRequest"
+      responses:
+        "200":
+          description: Cotação emitida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuoteResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /redeem:
+    post:
+      operationId: redeemExecution
+      summary: Executa serviço contratado; consome U-Notes (anti-double-spend)
+      security:
+        - ApiKeyAuth: []
+        - Ed25519Sig: []
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          description: Chave idempotente (UUID v4) para proteção de repetição
+          schema: { type: string, minLength: 8 }
+        - in: header
+          name: X-Tenant
+          required: false
+          description: DID do tenant (did:key|did:web)
+          schema: { $ref: "#/components/schemas/DID" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemRequest"
+      responses:
+        "200":
+          description: Execução concluída com atestado e reconciliação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RedeemResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+        "409":
+          description: Conflito de gasto (double-spend detectado)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          headers:
+            Retry-After:
+              description: Segundos até nova tentativa (se aplicável)
+              schema: { type: integer, minimum: 0 }
+        "429":
+          $ref: "#/components/responses/RateLimit"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /verify:
+    post:
+      operationId: verifyCapsule
+      summary: Verifica integridade/proveniência e conciliações UBL/Spent-Log
+      security:
+        - ApiKeyAuth: []
+        - Ed25519Sig: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyRequest"
+      responses:
+        "200":
+          description: Resultado de verificação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /attest:
+    post:
+      operationId: runAttestation
+      summary: Calcula métricas A/R/C/P (e V opcional) e emite attestation.issue
+      security:
+        - ApiKeyAuth: []
+        - Ed25519Sig: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttestRequest"
+      responses:
+        "200":
+          description: Atestado emitido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttestResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimit"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: "API key no formato 'Bearer <token>' ou 'ApiKey <token>'"
+    Ed25519Sig:
+      type: apiKey
+      in: header
+      name: X-Signature
+      description: |
+        Assinatura Ed25519 do corpo canônico + X-Timestamp + X-Sig-Context.
+        Headers adicionais:
+        - X-Timestamp: segundos desde epoch (anti-replay; janela curta)
+        - X-Sig-Context: "diamond:v1" (domain separation)
+
+  responses:
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: Falha de autenticação/assinatura
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    RateLimit:
+      description: Limite excedido
+      headers:
+        Retry-After:
+          description: Segundos até nova tentativa
+          schema: { type: integer, minimum: 0 }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    InternalError:
+      description: Erro interno
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    PaymentRequired:
+      description: Pagamento/Saldo insuficiente (U-Notes)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    DID:
+      type: string
+      maxLength: 128
+      pattern: "^did:(key|web):.+$"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          enum: [SPENT_CONFLICT, BAD_MANIFEST, UNAUTHORIZED, RATE_LIMIT, INTERNAL]
+        message: { type: string }
+        details: { type: object, additionalProperties: true }
+        retry_after: { type: integer, minimum: 0 }
+      required: [code, message]
+      additionalProperties: false
+
+    QuoteRequest:
+      type: object
+      properties:
+        scope:
+          type: string
+          enum: [audit, verification, score]
+        items:
+          type: integer
+          minimum: 1
+        sla_hours:
+          type: integer
+          minimum: 1
+        currency:
+          type: string
+          description: ISO-4217 (ex.: EUR, USD, BRL)
+        counterparty:
+          type: string
+      required: [scope, items, sla_hours, currency, counterparty]
+      additionalProperties: false
+
+    QuoteResponse:
+      type: object
+      properties:
+        quote_id: { type: string }
+        price:
+          type: object
+          properties:
+            amount: { type: number, minimum: 0 }
+            currency: { type: string }
+          required: [amount, currency]
+          additionalProperties: false
+        formula:
+          type: object
+          properties:
+            base: { type: number, minimum: 0 }
+            alpha: { type: number, minimum: 0 }
+            beta: { type: number, minimum: 0 }
+          required: [base, alpha, beta]
+          additionalProperties: false
+        expires_at: { type: string, format: date-time }
+        signature: { type: string }
+        ubl_preview:
+          type: object
+          properties:
+            invoice_no: { type: string }
+            due_date: { type: string, format: date-time }
+          required: [invoice_no]
+          additionalProperties: true
+      required: [quote_id, price, formula, expires_at, signature]
+      additionalProperties: false
+
+    RedeemRequest:
+      type: object
+      properties:
+        quote_id: { type: string }
+        payment_ref: { type: string }
+        manifest: { type: string }
+        unotes:
+          type: array
+          items: { type: string }
+          minItems: 1
+        gpu: { type: boolean }
+        sample:
+          type: integer
+          minimum: 1
+      required: [quote_id, payment_ref, manifest, unotes]
+      additionalProperties: false
+
+    RedeemResponse:
+      type: object
+      properties:
+        ok: { type: boolean }
+        attestation:
+          $ref: "#/components/schemas/AttestationIssue"
+        ubl_entries:
+          type: array
+          items: { type: string }
+        unote_txid: { type: string }
+        epoch_root: { type: string }
+      required: [ok, attestation]
+      additionalProperties: false
+
+    VerifyRequest:
+      type: object
+      properties:
+        manifest_path: { type: string }
+        checks:
+          type: array
+          items:
+            type: string
+            enum: [signature, merkle, coverage, ubl_match, spent]
+          minItems: 1
+      required: [manifest_path, checks]
+      additionalProperties: false
+
+    VerifyResponse:
+      type: object
+      properties:
+        ok: { type: boolean }
+        P:
+          type: number
+          enum: [0, 0.5, 1]
+        coverage:
+          type: number
+          minimum: 0
+          maximum: 1
+        ubl_match:
+          type: object
+          additionalProperties: true
+        spent:
+          type: object
+          additionalProperties: true
+      required: [ok]
+      additionalProperties: false
+
+    AttestRequest:
+      type: object
+      properties:
+        targets:
+          type: array
+          items: { type: string }
+          minItems: 1
+        metrics:
+          type: array
+          items:
+            type: string
+            enum: [A, R, C, P, V]
+          minItems: 1
+        gpu: { type: boolean }
+        sample:
+          type: integer
+          minimum: 1
+      required: [targets, metrics]
+      additionalProperties: false
+
+    AttestResponse:
+      type: object
+      properties:
+        attestation:
+          $ref: "#/components/schemas/AttestationIssue"
+      required: [attestation]
+      additionalProperties: false
+
+    AttestationIssue:
+      type: object
+      description: Espelho do attestation.issue (schema canônico resumido)
+      properties:
+        span_type:
+          type: string
+          const: attestation.issue
+        schema_version:
+          type: string
+          pattern: "^\\d+\\.\\d+\\.\\d+$"
+        pipeline_version:
+          type: string
+          pattern: "^\\d+\\.\\d+\\.\\d+$"
+        lot: { type: string }
+        scope:
+          type: object
+          properties:
+            type: { type: string, enum: [verification, audit, score] }
+            detail: { type: string }
+          required: [type]
+          additionalProperties: false
+        metrics:
+          type: object
+          properties:
+            A: { type: number, minimum: 0, maximum: 1 }
+            R: { type: number, minimum: 1 }
+            C: { type: number, minimum: 0, maximum: 1 }
+            P: { type: number, enum: [0, 0.5, 1] }
+            V:
+              anyOf:
+                - { type: number, minimum: 0 }
+                - { type: "null" }
+            V_LB95:
+              anyOf:
+                - { type: number, minimum: 0 }
+                - { type: "null" }
+          required: [A, R, C, P]
+          additionalProperties: false
+        ic: { type: object, additionalProperties: true }
+        contract:
+          type: object
+          properties:
+            sla: { type: string }
+            price_eur: { type: number, minimum: 0 }
+            royalty_split: { type: string, pattern: "^[0-9]{1,3}/[0-9]{1,3}$" }
+          required: [sla, price_eur, royalty_split]
+          additionalProperties: false
+        receipt:
+          type: object
+          properties:
+            hash: { type: string, pattern: "^[a-f0-9]{64}$" }
+            signature: { type: string, pattern: "^[a-f0-9]+$" }
+          required: [hash, signature]
+          additionalProperties: false
+        bytes_canon_hash_b3: { type: string, pattern: "^[a-f0-9]{64}$" }
+        signature_ed25519: { type: string, pattern: "^[a-f0-9]+$" }
+        sig_context:
+          type: string
+          enum: [diamond:v1]
+        owner_id:
+          $ref: "#/components/schemas/DID"
+        tenant_id:
+          $ref: "#/components/schemas/DID"
+        visibility:
+          type: string
+          enum: [private, public]
+      required:
+        - span_type
+        - schema_version
+        - pipeline_version
+        - lot
+        - scope
+        - metrics
+        - contract
+        - receipt
+        - bytes_canon_hash_b3
+        - signature_ed25519
+        - sig_context
+        - owner_id
+        - tenant_id
+        - visibility
+      additionalProperties: false
+

@@ -1,0 +1,47 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diamond/spec/schemas/trajectory.genesis.json",
+  "title": "trajectory.genesis",
+  "type": "object",
+  "properties": {
+    "span_type": { "const": "trajectory.genesis" },
+    "schema_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "pipeline_version": { "$ref": "common.defs.json#/$defs/semver" },
+    "tid": { "$ref": "common.defs.json#/$defs/tid" },
+    "pubkey_ed25519": { "$ref": "common.defs.json#/$defs/hex" },
+    "intent": {
+      "type": "object",
+      "properties": {
+        "scope": { "type": "array", "items": { "enum": ["audit","score","train"] } },
+        "royalty_split": { "type": "string", "pattern": "^[0-9]{1,3}/[0-9]{1,3}$" },
+        "revocable": { "type": "boolean" }
+      },
+      "required": ["scope","royalty_split","revocable"],
+      "additionalProperties": false
+    },
+    "personhood_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "enum": ["gov_doc_hash","humanity_attest","org_attest"] },
+          "hash": { "$ref": "common.defs.json#/$defs/b3" },
+          "issuer_sig": { "$ref": "common.defs.json#/$defs/hex" }
+        },
+        "required": ["type","hash","issuer_sig"],
+        "additionalProperties": false
+      }
+    },
+    "created_at": { "$ref": "common.defs.json#/$defs/iso8601" },
+    "genesis_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "bytes_canon_hash_b3": { "$ref": "common.defs.json#/$defs/b3" },
+    "sig_context": { "const": "diamond:genesis:v1" },
+    "signature_ed25519": { "$ref": "common.defs.json#/$defs/hex" },
+    "owner_id": { "$ref": "common.defs.json#/$defs/owner" },
+    "tenant_id": { "$ref": "common.defs.json#/$defs/tenant" },
+    "visibility": { "enum": ["private","public"] }
+  },
+  "required": ["span_type","schema_version","pipeline_version","tid","pubkey_ed25519","intent","created_at","genesis_b3","bytes_canon_hash_b3","sig_context","signature_ed25519","owner_id","tenant_id","visibility"],
+  "additionalProperties": false
+}

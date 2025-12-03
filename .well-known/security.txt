@@ -1,0 +1,7 @@
+Contact: mailto:security@logline.world
+Policy: https://example.com/SECURITY.md
+Encryption: https://example.com/pubkey.asc
+Preferred-Languages: en,pt-BR
+Canonical: https://example.com/.well-known/security.txt
+Expires: 2026-12-31T00:00:00Z
+

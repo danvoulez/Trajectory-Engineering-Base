@@ -24,4 +24,6 @@ __pycache__/
 .diamond_signing_key
 *.sig
 *.proof.json
+*.pem
+.env
 

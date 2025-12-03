@@ -419,7 +419,7 @@ components:
         signature_ed25519: { type: string, pattern: "^[a-f0-9]+$" }
         sig_context:
           type: string
-          enum: [diamond:v1]
+          enum: ["diamond:v1"]
         owner_id:
           $ref: "#/components/schemas/DID"
         tenant_id:

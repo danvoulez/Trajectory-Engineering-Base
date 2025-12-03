@@ -56,7 +56,7 @@ git push origin "$TAG_NAME"
 # 5. Gerar artifacts
 echo "3. Gerando artifacts..."
 git archive -o "$ZIP_NAME" HEAD
-b3sum "$ZIP_NAME" > "$B3_NAME"
+python3 scripts/b3sum.py "$ZIP_NAME" > "$B3_NAME"
 
 echo "   ✓ $ZIP_NAME criado"
 echo "   ✓ $B3_NAME criado"

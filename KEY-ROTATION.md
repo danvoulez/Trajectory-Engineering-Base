@@ -12,4 +12,3 @@
 **MUST** aceitar ambas as chaves durante a quarentena.
 
 **Auditoria:** manter trilha em manifest da trajetória (capsule index).
-

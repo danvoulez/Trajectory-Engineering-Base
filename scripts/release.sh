@@ -90,4 +90,3 @@ echo ""
 echo "✅ Release $TAG criada com sucesso!"
 echo "   📦 Artifacts: $ZIP_NAME, $B3_NAME"
 echo "   🔗 https://github.com/$REPO/releases/tag/$TAG"
-

@@ -63,4 +63,3 @@ O arquivo `pubkey.asc` é um placeholder. Para gerar uma chave PGP real:
 gpg --full-generate-key
 gpg --armor --export > pubkey.asc
 ```
-

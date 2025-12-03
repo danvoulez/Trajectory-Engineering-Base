@@ -85,4 +85,3 @@ pre-commit install
 2. **Instalar pre-commit**: `pip install pre-commit && pre-commit install`
 3. **Testar release script**: `./scripts/release.sh v1.0.1`
 4. **Atualizar security files** com informações reais (se necessário)
-

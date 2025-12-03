@@ -43,11 +43,11 @@ def generate_pgp_key():
     """Gera chave PGP usando gpg"""
     repo_root = Path(__file__).parent.parent
     pubkey_path = repo_root / "pubkey.asc"
-    
+
     if pubkey_path.exists():
         print(f"✓ pubkey.asc já existe")
         return
-    
+
     # Gera chave temporária (não-interativa)
     key_config = f"""
 %no-protection
@@ -60,7 +60,7 @@ Name-Email: security@logline.world
 Expire-Date: 0
 %commit
 """
-    
+
     try:
         # Cria chave temporária
         result = subprocess.run(
@@ -69,7 +69,7 @@ Expire-Date: 0
             capture_output=True,
             timeout=30
         )
-        
+
         if result.returncode != 0:
             # Se falhar, cria um placeholder
             print("⚠ gpg não disponível, criando placeholder...")
@@ -81,20 +81,20 @@ mQENBF9X... (placeholder - substitua por chave real)
 """
             pubkey_path.write_text(placeholder)
             return
-        
+
         # Exporta chave pública
         result = subprocess.run(
             ["gpg", "--armor", "--export", "security@logline.world"],
             capture_output=True,
             text=True
         )
-        
+
         if result.returncode == 0 and result.stdout:
             pubkey_path.write_text(result.stdout)
             print(f"✓ Gerado pubkey.asc")
         else:
             raise Exception("Falha ao exportar chave")
-            
+
     except (subprocess.TimeoutExpired, FileNotFoundError, Exception) as e:
         # Cria placeholder se gpg não estiver disponível
         print(f"⚠ Criando placeholder para pubkey.asc: {e}")
@@ -113,18 +113,18 @@ def sign_changelog():
     changelog_path = repo_root / "CHANGELOG.md"
     sig_path = repo_root / "CHANGELOG.md.sig"
     proof_path = repo_root / "CHANGELOG.md.proof.json"
-    
+
     if not changelog_path.exists():
         print(f"✗ CHANGELOG.md não encontrado")
         return
-    
+
     # Lê e canonicaliza
     content = changelog_path.read_text(encoding='utf-8')
     canonical = canonicalize_json_like(content)
-    
+
     # Calcula BLAKE3
     bytes_canon_hash_b3 = blake3_hash(canonical)
-    
+
     # Gera chave Ed25519 (ou usa existente)
     key_file = repo_root / ".diamond_signing_key"
     if key_file.exists():
@@ -136,18 +136,18 @@ def sign_changelog():
         signing_key = nacl.signing.SigningKey.generate()
         key_file.write_text(signing_key.encode(encoder=nacl.encoding.HexEncoder).decode())
         print(f"✓ Gerada nova chave Ed25519: {key_file}")
-    
+
     # Prepara mensagem para assinatura (sig_context || bytes_canon_hash_b3)
     sig_context = b"diamond:changelog:v1"
     message = sig_context + b"||" + bytes_canon_hash_b3.encode('utf-8')
-    
+
     # Assina
     signature = signing_key.sign(message)
     signature_hex = signature.signature.hex()
-    
+
     # Salva assinatura
     sig_path.write_text(signature_hex)
-    
+
     # Cria arquivo de prova (proof)
     proof = {
         "file": "CHANGELOG.md",
@@ -157,10 +157,10 @@ def sign_changelog():
         "pubkey_ed25519": signing_key.verify_key.encode(encoder=nacl.encoding.HexEncoder).decode(),
         "message_signed": message.decode('utf-8', errors='replace')
     }
-    
+
     import json
     proof_path.write_text(json.dumps(proof, indent=2, ensure_ascii=False))
-    
+
     print(f"✓ CHANGELOG.md assinado")
     print(f"  Hash (BLAKE3): {bytes_canon_hash_b3}")
     print(f"  Assinatura: {signature_hex[:32]}...")
@@ -172,4 +172,3 @@ if __name__ == "__main__":
     print()
     sign_changelog()
     print("\n✓ Concluído!")
-

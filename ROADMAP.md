@@ -22,4 +22,3 @@
 
 * Auditorias externas e selo "Diamante v1 Certified".
 * Programa de interoperabilidade com custodiantes.
-

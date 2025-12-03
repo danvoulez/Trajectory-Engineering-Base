@@ -8,4 +8,3 @@
 * **Spent-Log:** ledger append-only de gastos U-Note (epochs + Merkle).
 * **UBL:** contabilidade de negócios (receita/royalties/custos/impostos).
 * **A/R/V/C/P:** Autenticidade, Robustez, Valor, Capacidade de Auditoria, Proveniência.
-

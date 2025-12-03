@@ -51,14 +51,14 @@ headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.
 resp = requests.get("https://api.github.com/repos/danvoulez/Trajectory-Engineering-Base/git/refs/heads/temp/setup-workflow", headers=headers)
 if resp.status_code == 200:
     sha = resp.json()['object']['sha']
-    
+
     # Faz merge via API
     data = {
         "base": "main",
         "head": "temp/setup-workflow",
         "commit_message": "Merge workflow setup (via API)"
     }
-    
+
     resp = requests.post("https://api.github.com/repos/danvoulez/Trajectory-Engineering-Base/merges", headers=headers, json=data)
     if resp.status_code == 201:
         print("✓ Merge realizado via API")
@@ -66,4 +66,3 @@ if resp.status_code == 200:
         print(f"✗ Erro no merge: {resp.json()}")
 else:
     print(f"✗ Branch não encontrada: {resp.json()}")
-

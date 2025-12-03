@@ -7,4 +7,3 @@
 - "Breaking" vai para milestone v2 e precisa de RFC curta (máx 1 página).
 
 - Conflitos: preferir medição/reprodutibilidade a opinião.
-

@@ -53,4 +53,3 @@ gh issue create \
 
 echo ""
 echo "✓ Configuração concluída!"
-

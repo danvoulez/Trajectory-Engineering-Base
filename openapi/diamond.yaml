@@ -443,4 +443,3 @@ components:
         - tenant_id
         - visibility
       additionalProperties: false
-

@@ -30,4 +30,3 @@ Checks objetivos que definem sucesso:
 - **Flags/Feature toggles:** [Se aplicável]
 - **Deprecações:** [Timeline]
 - **Datas:** [Cronograma]
-

@@ -16,4 +16,3 @@
 * Não adicionar dependências de CI neste repo (preferência: CLI-only).
 * Tests locais **MUST** passar (`make check`).
 * Evite bikeshedding: nomes e enums curtos e estáveis.
-

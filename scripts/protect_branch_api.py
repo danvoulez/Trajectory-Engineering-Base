@@ -65,9 +65,9 @@ def protect_branch(token):
         'Authorization': f'token {token}',
         'Accept': 'application/vnd.github+json'
     }
-    
+
     url = f"{BASE_URL}/repos/{REPO_OWNER}/{REPO_NAME}/branches/main/protection"
-    
+
     data = {
         "required_status_checks": {
             "strict": True,
@@ -84,9 +84,9 @@ def protect_branch(token):
         "allow_force_pushes": False,
         "allow_deletions": False
     }
-    
+
     response = requests.put(url, headers=headers, json=data)
-    
+
     if response.status_code == 200:
         return True, response.json()
     else:
@@ -94,11 +94,11 @@ def protect_branch(token):
 
 def main():
     print("🔒 Configurando branch protection via GitHub App...\n")
-    
+
     try:
         token = get_installation_token()
         print("✓ Token obtido")
-        
+
         success, result = protect_branch(token)
         if success:
             print("✓ Branch protection configurada com sucesso!")
@@ -119,4 +119,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

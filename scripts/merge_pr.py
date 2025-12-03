@@ -60,4 +60,3 @@ if response.status_code == 200:
     print(f"✓ PR #{pr_number} merged com sucesso")
 else:
     print(f"✗ Erro: {response.json()}")
-

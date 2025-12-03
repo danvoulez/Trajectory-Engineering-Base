@@ -62,4 +62,3 @@ if resp.status_code == 200:
     print("  Faça o push e depois reative com: python3 scripts/protect_branch_api.py")
 else:
     print(f"✗ Erro: {resp.json()}")
-

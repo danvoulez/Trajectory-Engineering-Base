@@ -39,4 +39,3 @@
 ## 6) Revogação técnica
 
 * Se um atestado for comprometido (ex.: chave comprometida), o Operador **MAY** publicar **lista de revogação** (CRL) com hash e data. Reemissão **SHOULD** ser oferecida.
-

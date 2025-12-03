@@ -46,48 +46,48 @@ def load_private_key():
     if not PRIVATE_KEY_PATH.exists():
         print(f"✗ Chave privada não encontrada: {PRIVATE_KEY_PATH}")
         sys.exit(1)
-    
+
     with open(PRIVATE_KEY_PATH, 'r') as f:
         return f.read()
 
 def generate_jwt():
     """Gera JWT para autenticação do GitHub App"""
     private_key = load_private_key()
-    
+
     now = int(time.time())
     payload = {
         'iat': now - 60,  # Issued at time (60 seconds ago to account for clock skew)
         'exp': now + 600,  # Expires in 10 minutes
         'iss': GITHUB_APP_ID  # GitHub App ID
     }
-    
+
     token = jwt.encode(payload, private_key, algorithm='RS256')
     return token
 
 def get_installation_token():
     """Obtém token de instalação do GitHub App"""
     jwt_token = generate_jwt()
-    
+
     headers = {
         'Authorization': f'Bearer {jwt_token}',
         'Accept': 'application/vnd.github.v3+json'
     }
-    
+
     url = f"{BASE_URL}/app/installations/{GITHUB_APP_INSTALLATION_ID}/access_tokens"
     response = requests.post(url, headers=headers)
     response.raise_for_status()
-    
+
     return response.json()['token']
 
 def get_ssh_public_key():
     """Lê chave pública SSH"""
     ssh_key_path = Path.home() / ".ssh" / "id_ed25519_github.pub"
-    
+
     if not ssh_key_path.exists():
         print(f"✗ Chave SSH não encontrada: {ssh_key_path}")
         print("  Execute: ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_github")
         sys.exit(1)
-    
+
     return ssh_key_path.read_text().strip()
 
 def add_deploy_key(token, title, key):
@@ -96,16 +96,16 @@ def add_deploy_key(token, title, key):
         'Authorization': f'token {token}',
         'Accept': 'application/vnd.github.v3+json'
     }
-    
+
     url = f"{BASE_URL}/repos/{REPO_OWNER}/{REPO_NAME}/keys"
     data = {
         'title': title,
         'key': key,
         'read_only': False  # Permite write access
     }
-    
+
     response = requests.post(url, headers=headers, json=data)
-    
+
     if response.status_code == 201:
         return True, response.json()
     elif response.status_code == 422:
@@ -120,7 +120,7 @@ def add_deploy_key(token, title, key):
 
 def main():
     print("🔐 Adicionando chave SSH como Deploy Key via GitHub App...\n")
-    
+
     # 1. Obter token
     print("1. Obtendo token de instalação...")
     try:
@@ -129,7 +129,7 @@ def main():
     except Exception as e:
         print(f"   ✗ Erro ao obter token: {e}")
         sys.exit(1)
-    
+
     # 2. Ler chave SSH
     print("\n2. Lendo chave SSH...")
     try:
@@ -139,11 +139,11 @@ def main():
     except Exception as e:
         print(f"   ✗ Erro: {e}")
         sys.exit(1)
-    
+
     # 3. Adicionar deploy key
     print("\n3. Adicionando deploy key...")
     title = f"Trajectory Engineering - {datetime.now().strftime('%Y-%m-%d')}"
-    
+
     try:
         success, result = add_deploy_key(token, title, ssh_key)
         if success:
@@ -159,7 +159,7 @@ def main():
     except Exception as e:
         print(f"   ✗ Erro ao adicionar deploy key: {e}")
         sys.exit(1)
-    
+
     print("\n✅ Deploy key configurada com sucesso!")
     print("\n📝 Próximos passos:")
     print("   1. Configure SSH localmente:")
@@ -174,4 +174,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

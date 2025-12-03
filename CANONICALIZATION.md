@@ -22,4 +22,3 @@ Produzir `bytes_canon_hash_b3` determinístico.
 canon = json_canonicalize(obj)  // aplica regras 1–9
 hash  = BLAKE3(canon)
 ```
-

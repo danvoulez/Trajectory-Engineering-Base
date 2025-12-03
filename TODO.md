@@ -7,4 +7,3 @@
 * [ ] Implementar Spent-Log v0
 * [ ] Integração UBL mínima
 * [ ] Documentação de deployment
-

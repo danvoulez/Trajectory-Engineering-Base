@@ -1,7 +1,7 @@
 Contact: mailto:security@logline.world
-Policy: https://example.com/SECURITY.md
-Encryption: https://example.com/pubkey.asc
+Policy: https://github.com/danvoulez/Trajectory-Engineering-Base/blob/main/SECURITY.md
+Encryption: https://github.com/danvoulez/Trajectory-Engineering-Base/blob/main/pubkey.asc
 Preferred-Languages: en,pt-BR
-Canonical: https://example.com/.well-known/security.txt
+Canonical: https://github.com/danvoulez/Trajectory-Engineering-Base/blob/main/.well-known/security.txt
 Expires: 2026-12-31T00:00:00Z
 

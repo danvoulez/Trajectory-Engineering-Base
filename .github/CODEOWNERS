@@ -1,0 +1,21 @@
+# CODEOWNERS — Diamond Baseline v1
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Tudo vai para o maintainer principal
+* @danvoulez
+
+# Especificações técnicas requerem revisão
+/spec/ @danvoulez
+/schemas/ @danvoulez
+/openapi/ @danvoulez
+
+# Termos legais requerem revisão
+/terms/ @danvoulez
+TERMS.md @danvoulez
+LICENSES/ @danvoulez
+
+# Segurança
+SECURITY.md @danvoulez
+DISCLOSURE.md @danvoulez
+.well-known/ @danvoulez
+

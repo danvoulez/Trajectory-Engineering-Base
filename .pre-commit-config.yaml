@@ -17,14 +17,14 @@ repos:
     hooks:
       - id: validate-schemas
         name: Validate JSON Schemas
-        entry: python3 -m json.tool
+        entry: bash -c 'for f in "$@"; do python3 -m json.tool "$f" > /dev/null || exit 1; done' --
         language: system
         files: ^schemas/.*\.json$
         pass_filenames: true
 
       - id: validate-examples
         name: Validate Example JSON
-        entry: python3 -m json.tool
+        entry: bash -c 'for f in "$@"; do python3 -m json.tool "$f" > /dev/null || exit 1; done' --
         language: system
         files: ^examples/.*\.json$
         pass_filenames: true

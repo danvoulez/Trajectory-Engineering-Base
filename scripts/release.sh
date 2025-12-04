@@ -1,19 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script de release - valida, cria tag, gera artifacts e publica release
 
-set -e
+set -euo pipefail
 
 REPO="danvoulez/Trajectory-Engineering-Base"
 
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
     echo "Uso: $0 <version>"
     echo "Exemplo: $0 v1.0.1"
     exit 1
 fi
 
-VERSION=$1
-TAG_NAME="$VERSION"
-ZIP_NAME="diamond-${VERSION}.zip"
+TAG="${1}"
+TAG_NAME="$TAG"
+ZIP_NAME="diamond-${TAG}.zip"
 B3_NAME="${ZIP_NAME}.b3"
 
 echo "🚀 Criando release $VERSION..."
@@ -47,7 +47,7 @@ fi
 
 # 4. Criar tag
 echo "2. Criando tag $TAG_NAME..."
-git tag -a "$TAG_NAME" -m "Release $VERSION" || {
+git tag -s "$TAG_NAME" -m "release $TAG" 2>/dev/null || git tag "$TAG_NAME" -m "release $TAG" || {
     echo "✗ Erro ao criar tag"
     exit 1
 }
@@ -73,8 +73,8 @@ fi
 
 # 7. Criar release no GitHub
 echo "4. Criando release no GitHub..."
-gh release create "$TAG_NAME" \
-    --title "Diamond Baseline $VERSION" \
+gh release create "$TAG" \
+    --title "$TAG" \
     --notes-file "$NOTES_FILE" \
     --repo "$REPO" \
     "$ZIP_NAME" \
@@ -87,7 +87,7 @@ gh release create "$TAG_NAME" \
 rm -f "$NOTES_FILE"
 
 echo ""
-echo "✅ Release $VERSION criada com sucesso!"
+echo "✅ Release $TAG criada com sucesso!"
 echo "   📦 Artifacts: $ZIP_NAME, $B3_NAME"
-echo "   🔗 https://github.com/$REPO/releases/tag/$TAG_NAME"
+echo "   🔗 https://github.com/$REPO/releases/tag/$TAG"
 

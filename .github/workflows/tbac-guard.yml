@@ -1,0 +1,62 @@
+name: tbac-guard
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install deps
+        run: |
+          pip install jsonschema
+          pip install PyJWT cryptography requests || true
+      
+      - name: Validate schema + caps + merkle
+        run: |
+          set -e
+          TBACS=$(git ls-files 'tbac/**/*.json' || true)
+          if [ -z "$TBACS" ]; then
+            echo "No TBAC files found, skipping."
+            exit 0
+          fi
+          python - << 'PY'
+          import json, os, glob, gzip, subprocess, sys
+          from jsonschema import validate, Draft7Validator
+          
+          schema = json.load(open('schemas/tbac.schema.json','r',encoding='utf-8'))
+          
+          import pathlib
+          tbacs = glob.glob('tbac/**/*.json', recursive=True)
+          errs = 0
+          
+          for f in tbacs:
+            obj = json.load(open(f,'r',encoding='utf-8'))
+            v = Draft7Validator(schema)
+            problems = sorted(v.iter_errors(obj), key=lambda e: e.path)
+            if problems:
+              print("SCHEMA FAIL:", f)
+              for p in problems[:10]:
+                print(" -", "/".join(map(str,p.path)), p.message)
+              errs += 1
+            # caps
+            raw = open(f,'rb').read()
+            gz  = gzip.compress(raw)
+            if len(raw) > 8*1024*1024:
+              print("CAP FAIL (raw>8MB):", f); errs += 1
+            if len(gz) > 2*1024*1024:
+              print("CAP FAIL (gzip>2MB):", f); errs += 1
+            # merkle
+            rc = subprocess.run(["python3","tools/verify_tbac.py", f])
+            if rc.returncode != 0:
+              print("MERKLE FAIL:", f); errs += 1
+          
+          sys.exit(1 if errs else 0)
+          PY
+

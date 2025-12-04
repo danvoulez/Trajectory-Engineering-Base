@@ -107,7 +107,7 @@ def merkle_root(entries: List[Dict], algorithm: str) -> str:
             else:
                 # Ímpar: duplicar último hash
                 combined = hashes[i] + hashes[i]
-            
+
             if algorithm == "blake2s":
                 h = blake2s_hash(combined)
             elif algorithm == "sha256":
@@ -130,10 +130,10 @@ def verify_signature(
     try:
         pubkey_bytes = bytes.fromhex(pubkey_hex)
         sig_bytes = bytes.fromhex(sig_hex)
-        
+
         # Construir mensagem: sig_context || hash_b3
         message = (sig_context + "||" + hash_b3).encode('utf-8')
-        
+
         pubkey = ed25519.Ed25519PublicKey.from_public_bytes(pubkey_bytes)
         pubkey.verify(sig_bytes, message)
         return True
@@ -145,7 +145,7 @@ def verify_signature(
 def verify_tbac(file_path: Path, schema_path: Optional[Path] = None) -> bool:
     """Verifica um arquivo TBAC."""
     print(f"Verificando TBAC: {file_path}")
-    
+
     # 1. Carregar JSON
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -170,7 +170,7 @@ def verify_tbac(file_path: Path, schema_path: Optional[Path] = None) -> bool:
     # 3. Verificar canonicalização
     canon_bytes = canonicalize_json(data)
     hash_b3 = blake3_hash(canon_bytes)
-    
+
     if data.get('bytes_canon_hash_b3') != hash_b3:
         print(f"❌ bytes_canon_hash_b3 não confere: esperado {hash_b3}, encontrado {data.get('bytes_canon_hash_b3')}", file=sys.stderr)
         return False
@@ -180,7 +180,7 @@ def verify_tbac(file_path: Path, schema_path: Optional[Path] = None) -> bool:
     algorithm = data['merkle']['algorithm']
     expected_root = data['merkle']['root']
     computed_root = merkle_root(data['entries'], algorithm)
-    
+
     if expected_root != computed_root:
         print(f"❌ Merkle root não confere: esperado {expected_root}, calculado {computed_root}", file=sys.stderr)
         return False
@@ -199,12 +199,12 @@ def verify_tbac(file_path: Path, schema_path: Optional[Path] = None) -> bool:
     if len(data['entries']) > 50000:
         print(f"❌ Excede limite de entries: {len(data['entries'])} > 50000", file=sys.stderr)
         return False
-    
+
     size_bruto = len(canon_bytes)
     if size_bruto > 8 * 1024 * 1024:
         print(f"❌ Excede limite de tamanho bruto: {size_bruto} > 8MB", file=sys.stderr)
         return False
-    
+
     print(f"✓ Limites respeitados ({len(data['entries'])} entries, {size_bruto} bytes)")
 
     # 7. Verificar encadeamento (prev_root)
@@ -239,4 +239,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

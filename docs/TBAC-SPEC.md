@@ -170,4 +170,3 @@
   (iii) `prev_root` encadeado corretamente,
   (iv) assinatura válida,
   (v) passa `verify_tbac.py` com sucesso.
-

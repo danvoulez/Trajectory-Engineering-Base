@@ -1,0 +1,15 @@
+{
+  "version": "tbac-tools-v1",
+  "repo": "danvoulez/Trajectory-Engineering-Base",
+  "files": [
+    {
+      "path": "tools/verify_tbac.py",
+      "b3": "190a88f1daf1f1fb04f68e00ee5d2ed21a27861a61c109191d019c046e2f773f"
+    },
+    {
+      "path": "tools/generate_tbac.py",
+      "b3": "c49c32ca0829e702003ca43a7778f46e0d7c647fa37b19fd2a1080127cae7e44"
+    }
+  ],
+  "signature": "0fc30520cf770739b6446045af18d3a529d84543b02f87e51fc17c01b3817685a6b53165f713960b5d6b1c0e9731fba38354b275461f82bea1e92bba156ae701"
+}
